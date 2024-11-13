@@ -1,0 +1,19 @@
+@model IEnumerable<TodoList.Models.TodoItem>
+
+
+<h1> Todo List</h1>
+<a asp-action="Create">Add new Todo</a>
+<ul>
+    @foreach(var item in Model){
+        <li style="list-style: none;">
+            @item.Task - @item.IsComplete
+            <form asp-action="Delete" method="post" style="display: inline;">
+                <input type="hidden" name="id" value="@item.ID"/>
+                <button type="submit">Delete</button>
+                <a href="@Url.Action("Update", "Todo", new { id = item.ID })">Update</a>
+            </form>
+            
+        </li>
+        <br>
+    }
+</ul>

@@ -1,0 +1,17 @@
+@model TodoList.Models.TodoItem;
+
+<h2>Update Form</h2>
+
+<form method="post">
+    <div>
+        <label for="Task">Task</label>
+        <input type="text" id="Task" name="Task" value="@Model.Task" required />
+    </div>
+    <div>
+        <label for="IsComplete">Completed</label>
+        <input type="checkbox" id="IsComplete" name="IsComplete" @(Model.IsComplete ? "checked" : "") />
+    </div>
+    <div>
+        <button type="submit">Save</button>
+    </div>
+</form>

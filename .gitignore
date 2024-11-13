@@ -1,0 +1,41 @@
+# Binaries
+bin/
+obj/
+
+# SQLite database files
+*.db
+*.db-shm
+*.db-wal
+
+# User-specific files
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+
+# Configuration
+appsettings.Development.json  # Exclude environment-specific configuration files
+appsettings.Local.json        # If you use a local configuration
+
+# Logs
+*.log
+logs/
+
+# Dependencies
+lib/
+packages/
+
+# VS Code and Rider files
+.vscode/
+.idea/
+*.code-workspace
+
+# DotNet Publish files
+publish/
+out/
+
+# Others
+.DS_Store
+*.lock.json
+node_modules/
+wwwroot/lib/
