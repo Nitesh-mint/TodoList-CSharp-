@@ -9,7 +9,7 @@
     </div>
     <div>
         <label for="IsComplete">Completed</label>
-        <input type="checkbox" id="IsComplete" name="IsComplete" @(Model.IsComplete ? "checked" : "") />
+        <input type="checkbox" asp-for="IsComplete" id="IsComplete" />
     </div>
     <div>
         <button type="submit">Save</button>
