@@ -1,17 +1,28 @@
+@using Microsoft.AspNetCore.Mvc.ModelBinding.Binders
 @model TodoList.Models.TodoItem;
 
-<h2>Update Form</h2>
+<h2>⬆️ Update Form</h2>
 
 <form method="post">
-    <div>
-        <label for="Task">Task</label>
-        <input type="text" id="Task" name="Task" value="@Model.Task" required />
-    </div>
-    <div>
-        <label for="IsComplete">Completed</label>
-        <input type="checkbox" asp-for="IsComplete" id="IsComplete" />
-    </div>
-    <div>
-        <button type="submit">Save</button>
-    </div>
+    <div class="container-sm p-4">
+        <div class="row p-2">
+            <div class="col-3">
+                <label for="Task" style="max-width:fit-content; font-size: 30px; padding-bottom: 10px">Task</label>
+                <input type="text" id="Task" name="Task" value="@Model.Task" class="form-control" style="max-width:fit-content"/>
+            </div>
+            <div class="col-3">
+                <label for="IsComplete" style="max-width:fit-content; font-size: 30px; padding-bottom: 10px">Complete?</label>
+                <div class="form-check form-switch d-flex justify-content-end" style="max-width: 80px">
+                    <input class="form-check-input" name="IsComplete" type="checkbox" asp-for="IsComplete" id="IsComplete" style="margin-bottom: 10px; height: 30px; width: 50px" />
+                </div>
+            </div>
+        </div>
+
+        <div class="row p-2">
+            <div class="col-3 p-2">
+                <label style="max-width:fit-content; font-size: 30px; padding-bottom: 10px">Due Date: </label><input type="datetime-local" class="form-control" style="max-width: 150px" asp-for="DueDate" id="DueDate" value="@Model.DueDate?.ToString("yyyy-MM-ddTHH:mm")"/>
+            </div>
+        </div>
+        <button class="btn btn btn-success m-2" type="submit">Save</button>
+        </div>
 </form>

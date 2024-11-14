@@ -1,7 +1,9 @@
+using System.Runtime.InteropServices.JavaScript;
 using Microsoft.AspNetCore.Mvc;
 using TodoList.Data;
 using TodoList.Models;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authentication.OAuth;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
 
@@ -14,8 +16,45 @@ namespace TodoList.Controllers{
         }
 
         //GET : Todo 
-        public async Task<IActionResult> Index(){
-            return View(await _context.TodoItems.ToListAsync());
+        public async Task<IActionResult> Index(string searchString, string sortOrder, int? pageNumber)
+        {
+            ViewData["DateSortParm"] = sortOrder == "Date" ? "Date_desc" : "Date";
+            ViewData["CurrentFilter"] = searchString;
+
+            if (searchString != null)
+            {
+                pageNumber = 1;
+            }
+           
+            var tasks = from t in _context.TodoItems select t;
+
+            if (!String.IsNullOrEmpty(searchString))
+            {
+                tasks = tasks.Where(t => t.Task.ToLower().Contains(searchString.ToLower()));
+                //counting and passing the number of search result to the view.
+                int numTasks = tasks.Count();
+                ViewData["numTasks"] = numTasks;
+            }
+
+            switch (sortOrder)
+            {
+                case "Date":
+                    tasks = tasks.OrderBy(t => t.CreatedDate);
+                    break;
+                case "Date_desc":
+                    tasks = tasks.OrderByDescending(t => t.CreatedDate);
+                    break;
+            }
+            
+            
+            var expiredTasks = tasks.Where(t => t.DueDate.Value.Date < DateTime.Now.Date).ToList();
+            ViewData["expiredTasks"] = expiredTasks;
+            Console.Write("Expired:"+ expiredTasks.Count());
+            
+            
+            int pageSize = 5;
+            
+            return View(await PaginatedList<TodoItem>.CreateAsync(tasks.AsNoTracking(), pageNumber ?? 1, pageSize));
         }      
 
         // Get: Todo/Create 
@@ -27,7 +66,9 @@ namespace TodoList.Controllers{
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(TodoItem todoItem){
-            if(ModelState.IsValid){
+            if(ModelState.IsValid)
+            {
+                todoItem.CreatedDate = DateTime.Now;
                 _context.Add(todoItem);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
@@ -60,6 +101,7 @@ namespace TodoList.Controllers{
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> Update(int id, TodoItem todoItem)
     {
+        Console.WriteLine("Due Date: " + todoItem.DueDate);
         if (id != todoItem.ID)
         {
             return NotFound();
