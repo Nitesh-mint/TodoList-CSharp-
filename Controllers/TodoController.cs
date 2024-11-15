@@ -46,13 +46,13 @@ namespace TodoList.Controllers{
                     break;
             }
             
-            
             var expiredTasks = tasks.Where(t => t.DueDate.Value.Date < DateTime.Now.Date).ToList();
             ViewData["expiredTasks"] = expiredTasks;
             Console.Write("Expired:"+ expiredTasks.Count());
             
             
             int pageSize = 5;
+            
             
             return View(await PaginatedList<TodoItem>.CreateAsync(tasks.AsNoTracking(), pageNumber ?? 1, pageSize));
         }      

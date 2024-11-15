@@ -97,7 +97,14 @@
     var prevDisabled = !Model.HasPreviousPage ? "disabled" : "";
     var nextDisabled = !Model.HasNextPage ? "disabled" : "";
     }
-
+    <p>@Model.Capacity</p>
+    <label> Rows per pages: </label>
+    <select id="dataPerPages">
+        <option value="2">2</option>
+        <option value="4">4</option>
+        <option value="5">5</option>
+        <option value="10">10</option>
+    </select>
     <a asp-action="Index"
        asp-route-sortOrder="@ViewData["CurrentSort"]"
        asp-route-pageNumber="@(Model.PageIndex - 1)"
@@ -119,13 +126,18 @@
     integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
     crossorigin="anonymous"></script>
 <script>
-    if(location.search.length === 0) {
+    if(!(location.search.startsWith("?SearchString"))) {
         document.getElementById("model_count").setAttribute("style", "display:none;");
     }
     function popup(){
         confirm("Do you really want to delete ?");
     }
-
-
+    
+    const dataperpages = document.getElementById("dataPerPages");
+    dataperpages.addEventListener("change", function (){
+        const selectedValues = dataperpages.value;
+        console.log(selectedValues);
+    });
+    
 </script>
 </html>
